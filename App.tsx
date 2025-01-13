@@ -1,17 +1,51 @@
+import { useEffect, useState } from "react";
+import { StatusBar, View } from "react-native";
+import { SplashScreen } from "./src/screens";
+import AuthNavigator from "./src/navigators/AuthNavigator";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import WelcomeScreen from "./src/screens/WelcomeScreen";
-import HomeScreen from "./src/screens/HomeScreen";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import MainNavigator from "./src/navigators/MainNavigator";
 
-const Stack = createNativeStackNavigator();
-
-export default function App() {
+const App = () => {
+  // sử dụng useState để lưu thời gian 1.5 giây
+  const [isShowSplash, setIsShowSplash] = useState(true);
+  //muốn lưu liền thì dùng store redux toolkit
+  const [accessToken, setAccessToken] = useState('');
+  //kiểm tra đăng nhập
+  const { getItem, setItem } = useAsyncStorage('assetToken');
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsShowSplash(false);
+    }, 1500);
+    return () => clearTimeout(timeout);
+  }, []);
+  //chạy 01 lần thì dùng useEffect không tham số []
+  useEffect(() => {
+    checkLogin();
+  }, []);
+  //Khu vực các hàm
+  const checkLogin = async () => {
+    const token = await getItem();
+    console.log(token);
+    //check token
+    token && setAccessToken(token);
+  };
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View>
+      <StatusBar
+        barStyle={'dark-content'}
+        translucent
+        backgroundColor={'transparent'}
+      />
+      {!isShowSplash ? (
+        <SplashScreen />
+      ) : (
+        <NavigationContainer>
+          {/* Kiểm tra token nếu có thì trả về Main không thì trả về Auth */}
+          {accessToken ? <MainNavigator /> : <AuthNavigator />}
+        </NavigationContainer>
+      )}
+    </View>
   );
-}
+};
+export default App;
