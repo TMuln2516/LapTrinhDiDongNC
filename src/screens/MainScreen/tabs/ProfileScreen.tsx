@@ -9,10 +9,10 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import {getApi, postApi, putApi} from '../api/Api';
 import DocumentPicker from 'react-native-document-picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getApi, postApi, putApi} from '../../../api/Api';
 
 type UserType = {
   id: string;
@@ -24,7 +24,7 @@ type UserType = {
   avatar: string;
 };
 
-const HomeScreen = () => {
+const ProfileScreen = () => {
   const [user, setUser] = useState<UserType | undefined>();
   const [editing, setEditing] = useState(false);
   const [changeAvatar, setChangeAvatar] = useState(false);
@@ -32,7 +32,7 @@ const HomeScreen = () => {
   const [otp, setOtp] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
-  const defaultAvatar = require('../../assets/images/avatar.jpg');
+  const defaultAvatar = require('../../../../assets/images/avatar.jpg');
 
   useEffect(() => {
     getApi('/api/users/bio', true, (error, response) => {
@@ -135,7 +135,7 @@ const HomeScreen = () => {
       });
 
       const response = await axios.put(
-        'http://192.168.1.7:8080/api/users/avatar',
+        'http://172.20.10.13:8080/api/users/avatar',
         formData,
         {
           headers: {
@@ -291,7 +291,7 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {flex: 1, alignItems: 'center', paddingTop: 50},

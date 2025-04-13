@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SplashScreen from '../screens/SplashScreen';
 import OnBoardScreen from '../screens/OnBoardScreen';
 import LoginScreen from '../screens/LoginScreen';
-import HomeScreen from '../screens/HomeScreen';
+import MainScreen from '../screens/MainScreen/MainScreen';
 
 const Routers = () => {
   const Stack = createNativeStackNavigator();
@@ -33,8 +33,8 @@ const Routers = () => {
           }}
         />
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Main"
+          component={MainScreen}
           options={{
             headerShown: false,
           }}
